@@ -10,9 +10,9 @@
                 {{ config('app.name') }}
             </div>
         </div>
-        <p class="card-subtitle text-muted text-center font-small-3 ">
+        {{-- <p class="card-subtitle text-muted text-center font-small-3 ">
             Cliquer juste sur se connecter. (Ce n'est qu'une marquette)
-        </p>
+        </p> --}}
         <div class="card-content">
             <div class="card-body">
                 <form class="form-horizontal" action="{{ route('login') }}" method="POST">
