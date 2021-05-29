@@ -161,8 +161,8 @@
 
 @section('js')
     <script>
-        @error('libelle')
-            notify('warning', 'Cette activité existe déjà.');
-        @enderror
+        const affiche = () => {
+            
+        }
     </script>
 @endsection
