@@ -1,5 +1,9 @@
 <?php
 
+function annee () {
+    return session('annee');
+}
+
 function minText($text) {
     return substr($text, 0, 50) . '...';
 }

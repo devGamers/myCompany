@@ -4,7 +4,7 @@
         <ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
 
             <li class="nav-item">
-                <a class="nav-link" href="{{ route($sideCompta ? 'dashboard.comptabilite' : 'dashboard.agent') }}">
+                <a class="nav-link" href="{{ route($sideCompta ? 'dashboard.entree-sortie' : 'dashboard.travailleur') }}">
                     <i class="ft-home"></i>
                     <span>Dashboard</span>
                 </a>

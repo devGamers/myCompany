@@ -10,7 +10,7 @@
 
     <div class="content-header row">
         <div class="content-header-left col-md-4 col-12 mb-2">
-            <h3 class="content-header-title">Compabilité</h3>
+            <h3 class="content-header-title">Gestion des entrées et sorties</h3>
         </div>
 
         <div class="content-header-right col-md-8 col-12">
@@ -21,7 +21,7 @@
                             <a>Dahboard</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard.comptabilite') }}">Compabilité</a>
+                            <a href="{{ route('dashboard.entree-sortie') }}">Entrées Sorties</a>
                         </li>
                     </ol>
                 </div>

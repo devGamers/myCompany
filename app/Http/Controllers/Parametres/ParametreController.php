@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Parametres;
 
-use App\Activite;
-use App\EntreeSortie;
+use App\Http\Controllers\Controller;
+use App\Parametre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class EntreeSortiesController extends Controller
+class ParametreController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,7 @@ class EntreeSortiesController extends Controller
      */
     public function index()
     {
-        $activite = Activite::latest()->get();
-        $sideCompta = true;
-        $listes = EntreeSortie::whereMonth('date', date('m'))->whereYear('date', date('Y'))->latest()->get();
-        //dd($entreeSortie[0]->activite);
-        return view('pages.entrees-sorties.index', compact('activite', 'sideCompta', 'listes'));
+        //
     }
 
     /**
@@ -30,9 +26,7 @@ class EntreeSortiesController extends Controller
      */
     public function create()
     {
-        $activite = Activite::latest()->get();
-        $sideCompta = true;
-        return view('pages.entrees-sorties.create', compact('activite', 'sideCompta'));
+        //
     }
 
     /**
@@ -43,24 +37,7 @@ class EntreeSortiesController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'date' => 'required',
-            'entree' => 'required',
-            'sortie' => 'required',
-            'activites_id' => 'required'
-        ]);
-
-        DB::beginTransaction();
-
-        try {
-            EntreeSortie::create($request->all());
-        } catch (\Throwable $th) {
-            throw $th;
-            DB::rollBack();
-        }
-
-        DB::commit();
-        return redirect()->route('entree-sorties.index')->with('success', "Nouvelle entrée/sortie ajoutée");
+        //
     }
 
     /**
@@ -92,9 +69,23 @@ class EntreeSortiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Parametre $parametre)
     {
-        //
+        $this->validate($request, [
+            'nbrAnnee' => 'required|min:1',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $parametre->update($request->all());
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+        }
+
+        DB::commit();
+        return redirect()->back()->with('success', "Paramètre modifié");
     }
 
     /**

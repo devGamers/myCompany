@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\EntreeSorties;
 
 use App\Activite;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -18,7 +19,7 @@ class ActiviteController extends Controller
     {
         $activite = Activite::latest()->get();
         $sideCompta = true;
-        return view('pages.activite.index', compact('activite', 'sideCompta'));
+        return view('pages.entreeSortie.activite.index', compact('activite', 'sideCompta'));
     }
 
     /**

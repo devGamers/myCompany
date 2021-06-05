@@ -48,12 +48,17 @@
                                     <span class="avatar avatar-online">
                                         <img src="{{ asset('storage/user.png') }}" alt="avatar">
                                         <span class="user-name text-bold-700 ml-1">
-                                            John Doe
+                                            {{ Str::substr(auth()->user()->name, 0, 8) }}...
                                         </span>
                                     </span>
                                 </a>
 
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('annee') }}">
+                                    <i class="ft-pie-chart"></i>
+                                    Année : {{ annee() }}
+                                </a>
+
                                 <a class="dropdown-item" href="{{ route('home') }}">
                                     <i class="ft-home"></i>
                                     Accueil

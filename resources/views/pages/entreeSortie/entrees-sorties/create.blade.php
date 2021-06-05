@@ -80,15 +80,20 @@
                                     <div class="row">
                                         <div class="col-xl-4 col-12 form-group">
                                             <label for="date">Date <span class="text-danger">*</span></label>
-                                            <input type="date" name="date" id="date" class="form-control" required max="{{ aujourdhui() }}">
+                                            <input type="date" name="date" id="date" class="form-control" required max="{{ aujourdhui() }}" value="{{ aujourdhui() }}">
                                         </div>
                                         <div class="col-xl-4 col-12 form-group">
-                                            <label for="entree">Entrée <span class="text-danger">*</span></label>
-                                            <input type="text" name="entree" id="entree" class="form-control key" required>
+                                            <label for="type">Type <span class="text-danger">*</span></label>
+                                            <select name="type" id="type" class="form-control" required>
+                                                <option value="{{ old('type') }}">{{ old('type') }}</option>
+                                                <option value=""></option>
+                                                <option value="entree">entree</option>
+                                                <option value="sortie">sortie</option>
+                                            </select>
                                         </div>
                                         <div class="col-xl-4 col-12 form-group">
-                                            <label for="sortie">Sortie <span class="text-danger">*</span></label>
-                                            <input type="text" name="sortie" id="sortie" class="form-control key" required>
+                                            <label for="value">Valeur <span class="text-danger">*</span></label>
+                                            <input type="number" value="0" name="" id="value" class="form-control key" required>
                                         </div>
                                         <div class="col-12 form-group">
                                             <label for="description">Description</label>
@@ -112,9 +117,22 @@
 
 @section('js')
     <script>
-        @error('libelle')
-            notify('warning', 'Cette activité existe déjà.');
+        @error('activites_id')
+            notify('warning', 'Choisir une activité');
         @enderror
+
+        @error('date')
+            notify('warning', 'Choisir la date.');
+        @enderror
+
+        @error('type')
+            notify('warning', "Choisir un type d'action.");
+        @enderror
+
+        $('#type').change(() => {
+            let type = $('#type').val()
+            $('#value').attr('name', type)
+        })
 
         $('#valider').click(() => {
             if ($('#activite').val() === "") {

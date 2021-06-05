@@ -11,22 +11,23 @@
             </div>
         </div>
         <p class="card-subtitle text-muted text-center font-small-3">
-            Définir l'exercice. (Ce n'est qu'une marquette, cliquer juste sur continuer)
+            Choisir l'année
         </p>
         <div class="card-content">
             <div class="card-body">
-                <form class="form-horizontal" action="">
+                <form class="form-horizontal" action="{{ route('annee_choisi') }}" method="POST">
+                    @csrf
                     <fieldset class="form-group position-relative has-icon-left">
-                        <select class="select2 form-control" id="default-select">
-                            <option value="1">01/01/2019 - 31/12/2019</option>
-                            <option value="2">01/01/2020 - 31/12/2020</option>
-                            <option value="3">03/05/2021 - 06/06/2021</option>
+                        <select class="select2 form-control" id="default-select" name="annee_choisi">
+                            @foreach ($annee as $value)
+                                <option value="{{ $value }}">{{ $value }}</option>
+                            @endforeach
                         </select>
                     </fieldset>
                     <div class="form-group text-center">
-                        <a class="btn round btn-block btn-glow btn-bg-gradient-x-purple-blue col-12 mr-1 mb-1 text-white" href="{{ route('dashboard.comptabilite') }}">
+                        <button type="submit" class="btn round btn-block btn-glow btn-bg-gradient-x-purple-blue col-12 mr-1 mb-1">
                             Continuer
-                        </a>
+                        </button>
                     </div>
                 </form>
             </div>

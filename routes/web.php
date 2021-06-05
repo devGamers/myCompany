@@ -25,12 +25,26 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
 
-    //Route::get('/exercice', 'HomeController@exercice')->name('exercice');
-    Route::get('/dashboard', 'HomeController@index')->name('home');
-    Route::get('/dashboard/comptabilite', 'HomeController@comptabilite')->name('dashboard.comptabilite');
-    Route::get('/dashboard/agent', 'HomeController@agent')->name('dashboard.agent');
-    Route::resource('agent', 'UserController');
-    Route::resource('activite', 'ActiviteController');
-    //Route::resource('comptabilite', 'ComptabiliteController');
-    Route::resource('entree-sorties', 'EntreeSortiesController');
+    Route::get('/annee', 'HomeController@annee')->name('annee');
+    Route::post('annee', 'HomeController@annee_choisi')->name('annee_choisi');
+
+    Route::middleware(['annee'])->group(function () {
+
+        Route::get('/dashboard', 'HomeController@index')->name('home');
+        Route::get('/dashboard/entree-sortie', 'HomeController@entreeSortie')->name('dashboard.entree-sortie');
+        Route::get('/dashboard/travailleur', 'HomeController@travailleur')->name('dashboard.travailleur');
+        Route::get('/dashboard/parametre', 'HomeController@parametre')->name('dashboard.parametre');
+
+        Route::resource('agent', 'UserController');
+
+        Route::prefix('entree-sortie')->namespace('EntreeSorties')->group(function () {
+            Route::resource('activite', 'ActiviteController');
+            Route::resource('entree-sorties', 'EntreeSortieController');
+            Route::post('entree-sorties/affiche/{activite}/{mois}', 'EntreeSortieController@affiche')->name('affiche');
+        });
+
+        Route::prefix('parametre')->namespace('Parametres')->group(function () {
+            Route::resource('parametre', 'ParametreController');
+        });
+    });
 });
