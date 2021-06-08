@@ -4,6 +4,7 @@
             <tr>
                 <th width="5%"></th>
                 <th>Activité</th>
+                <th>Type dépense</th>
                 <th width="15%">Entrée</th>
                 <th width="15%">Sorties</th>
                 <th width="30%">Description</th>
@@ -15,8 +16,9 @@
                 <tr>
                     <td>{{ ++$key }}</td>
                     <td>{{ $liste->activite->libelle }}</td>
-                    <td class="text-right">{{ formatNumber($liste->entree) }}</td>
-                    <td class="text-right">{{ formatNumber($liste->sortie) }}</td>
+                    <td>{{ $liste->type_depenses_id ? $liste->type_depense->libelle : '-' }}</td>
+                    <td class="text-right">{{ $liste->entree == 0 ? '-' : formatNumber($liste->entree) }}</td>
+                    <td class="text-right">{{ $liste->sortie == 0 ? '-' : formatNumber($liste->sortie) }}</td>
                     <td data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="{{ $liste->description }}" data-bg-color="pink" data-placement="right">
                         {{ minText($liste->description) }}
                     </td>
@@ -47,7 +49,7 @@
         </tbody>
         <tfoot>
             <tr class="bg-gradient-directional-blue text-white">
-                <th colspan="2" class="text-right">Total :</th>
+                <th colspan="3" class="text-right">Total :</th>
                 <th class="text-right">{{ formatNumber($listes->sum('entree')) }}</th>
                 <th class="text-right">{{ formatNumber($listes->sum('sortie')) }}</th>
                 <th class="text-right">Solde :</th>

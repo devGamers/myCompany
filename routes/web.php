@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('entree-sortie')->namespace('EntreeSorties')->group(function () {
             Route::resource('activite', 'ActiviteController');
+            Route::post('activite/{activite}/type_depense/', 'ActiviteController@activite_type_depense')->name('activite.type_depense');
             Route::resource('type-depense', 'TypeDepenseController');
             Route::post('type-depense/affiche/{activite}', 'TypeDepenseController@affiche')->name('type-depense.affiche');
             Route::resource('entree-sorties', 'EntreeSortieController');

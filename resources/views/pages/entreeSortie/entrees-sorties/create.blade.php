@@ -78,11 +78,11 @@
                                     @csrf
                                     <input type="hidden" id="activite" name="activites_id">
                                     <div class="row">
-                                        <div class="col-xl-4 col-12 form-group">
+                                        <div class="col-xl-3 col-12 form-group">
                                             <label for="date">Date <span class="text-danger">*</span></label>
                                             <input type="date" name="date" id="date" class="form-control" required max="{{ aujourdhui() }}" value="{{ aujourdhui() }}">
                                         </div>
-                                        <div class="col-xl-4 col-12 form-group">
+                                        <div class="col-xl-3 col-12 form-group" id="blockType">
                                             <label for="type">Type <span class="text-danger">*</span></label>
                                             <select name="type" id="type" class="form-control" required>
                                                 <option value="{{ old('type') }}">{{ old('type') }}</option>
@@ -91,10 +91,16 @@
                                                 <option value="sortie">sortie</option>
                                             </select>
                                         </div>
-                                        <div class="col-xl-4 col-12 form-group">
+
+                                        <div class="form-group" id="blockDepense">
+
+                                        </div>
+
+                                        <div class="col-xl-3 col-12 form-group" id="blockValeur">
                                             <label for="value">Valeur <span class="text-danger">*</span></label>
                                             <input type="number" value="0" name="" id="value" class="form-control key" required>
                                         </div>
+
                                         <div class="col-12 form-group">
                                             <label for="description">Description</label>
                                             <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
@@ -131,7 +137,24 @@
 
         $('#type').change(() => {
             let type = $('#type').val()
-            $('#value').attr('name', type)
+            if ($('#activite').val() === "") {
+                notify('warning', 'Veuillez choisir une activité avant');
+            }else{
+                if (type === 'sortie') {
+                    $('#blockType').attr('class', 'col-xl-3 col-12 form-group')
+                    $('#blockValeur').attr('class', 'col-xl-3 col-12 form-group')
+                    $('#blockDepense').attr('class', 'col-xl-3 col-12 form-group')
+                    //$('#type_depense').removeAttr('disabled')
+                    $('#type_action').text("Type de sortie")
+                }else{
+                    $('#blockType').attr('class', 'col-xl-3 col-12 form-group')
+                    $('#blockValeur').attr('class', 'col-xl-3 col-12 form-group')
+                    $('#blockDepense').attr('class', 'col-xl-3 col-12 form-group')
+                    //$('#type_depense').attr('disabled', 'true')
+                    $('#type_action').text("Type d'entrée")
+                }
+                $('#value').attr('name', type)
+            }
         })
 
         $('#valider').click(() => {
@@ -143,6 +166,22 @@
         })
 
         const chooseActivity = id => {
+            let url = "{{ route('activite.type_depense', ['activite' => ':act']) }}"
+            url = url.replace(':act', id)
+            $.ajax({
+                type : 'POST',
+                url : url,
+                beforeSend : function () {
+                    notify('warning', "Chargement...");
+                },
+                success: function (response) { //alert('response');
+                    toastr.clear()
+                    $('#blockDepense').html(response);
+                },
+                error: function (response) {
+                    notify('error', "Une erreur s'est produite. Contactez le concepteur.");
+                }
+            })
             $('.activity').attr('class', 'activity btn btn-outline-success btn-sm')
             $('#btn' + id).removeClass('btn-outline-success').addClass('btn-success')
             $('#activite').val(id)
