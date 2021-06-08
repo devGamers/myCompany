@@ -1,5 +1,15 @@
 <?php
 
+use App\Log;
+
+function insertLog($description) {
+    Log::create([
+        'name' => auth()->user()->name,
+        'description' => $description,
+        'users_id' => auth()->user()->id
+    ]);
+}
+
 function annee () {
     return session('annee');
 }

@@ -11,4 +11,9 @@ class Activite extends Model
     public function entreeSorties() {
         return $this->hasMany(EntreeSortie::class, 'activites_id');
     }
+
+    public function type_depenses()
+    {
+        return $this->hasMany(TypeDepense::class, 'activites_id')->latest();
+    }
 }

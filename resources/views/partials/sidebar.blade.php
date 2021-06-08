@@ -17,6 +17,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ route('type-depense.index') }}">
+                        <i class="ft-sliders"></i>
+                        <span>Type de dépense</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('entree-sorties.index') }}">
                         <i class="ft-shuffle"></i>
                         <span>Entrées Sortie</span>

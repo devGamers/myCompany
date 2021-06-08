@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEntreeSortiesTable extends Migration
+class CreateTypeDepensesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateEntreeSortiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('entree_sorties', function (Blueprint $table) {
+        Schema::create('type_depenses', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->text('description');
-            $table->double('entree')->default(0);
-            $table->double('sortie')->default(0);
+            $table->string('libelle');
             $table->unsignedBigInteger('activites_id');
-            $table->unsignedBigInteger('type_depenses_id')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateEntreeSortiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entree_sorties');
+        Schema::dropIfExists('type_depenses');
     }
 }

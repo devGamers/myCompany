@@ -48,6 +48,7 @@ class ActiviteController extends Controller
 
         try {
             Activite::create($request->all());
+            insertLog("Enregistrement de l'activité " . $request->libelle);
         } catch (\Throwable $th) {
             throw $th;
             DB::rollBack();
@@ -97,6 +98,7 @@ class ActiviteController extends Controller
         DB::beginTransaction();
 
         try {
+            insertLog("Modification de l'activité " . $activite->libelle . " en : " . $request->libelle);
             $activite->update($request->all());
         } catch (\Throwable $th) {
             throw $th;
@@ -117,6 +119,7 @@ class ActiviteController extends Controller
         if ($activite->comptabilites->count() > 0) {
             return redirect()->back()->with('warning', "Impossible de supprimer cette activité car elle possède des données");
         }else{
+            insertLog("Suppression de l'activité " . $activite->libelle);
             $activite->delete();
             return redirect()->back()->with('success', "Activité supprimée.");
         }

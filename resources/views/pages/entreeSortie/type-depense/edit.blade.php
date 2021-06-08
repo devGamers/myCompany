@@ -5,7 +5,7 @@
 
     <div class="content-header row">
         <div class="content-header-left col-md-4 col-12 mb-2">
-            <h3 class="content-header-title">Entrées et Sorties</h3>
+            <h3 class="content-header-title">Modification de type de dépense</h3>
         </div>
 
         <div class="content-header-right col-md-8 col-12">
@@ -13,10 +13,10 @@
                 <div class="breadcrumb-wrapper mr-1">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a>Entrées et Sorties</a>
+                            <a>Entrées Sorties</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{{ route('entree-sorties.index') }}">Liste</a>
+                            <a href="{{ route('type-depense.index') }}">Type de dépense</a>
                         </li>
                     </ol>
                 </div>
@@ -47,23 +47,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <th>0</th>
-                                                <td>Toutes les activités</td>
-                                                <td>
-                                                    <button onclick="filtre('activite', '0')"
-                                                        class="btn btn-outline-success btn-sm activity" id="activity0">
-                                                        <i class="ft-check"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
                                             @foreach ($activite as $key => $value)
                                                 <tr>
                                                     <td>{{ ++$key }}</td>
                                                     <td>{{ $value->libelle }}</td>
                                                     <td>
-                                                        <button onclick="filtre('activite', '{{ $value->id }}')"
-                                                            class="btn btn-outline-success btn-sm activity" id="activity{{ $value->id }}">
+                                                        <button onclick="filtre({{ $value->id }})"
+                                                            class="btn btn-sm activity"
+                                                                id="activity{{ $value->id }}">
                                                             <i class="ft-check"></i>
                                                         </button>
                                                     </td>
@@ -77,34 +68,27 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="activite" value="0">
-                <input type="hidden" id="mois" value="{{ date('m') }}">
-
                 <div class="col-xl-8 col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Choisir le mois</h4>
+                            <h4 class="card-title">Type de dépense</h4>
                         </div>
                         <div class="card-content collapse show">
                             <div class="card-body">
-                                <div class="row d-flex justify-content-center">
-                                    @foreach (getMois() as $key => $value )
-                                        @php($numberMois = formatChiffre($key+1))
-                                        <button type="button" onclick="filtre('mois', '{{ $numberMois }}')" id="mois{{ $numberMois }}"
-                                            class="btn mr-1 mb-1 mois {{ $numberMois == date('m') ? 'btn-info' : 'btn-outline-info' }}"
-                                        >
-                                            {{ $value }}
-                                        </button>
-                                    @endforeach
-                                </div>
+                                <form class="d-flex justify-content-center" method="POST" action="{{ route('type-depense.update', ['type_depense' => $type_depense]) }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" id="activite" value="{{ $type_depense->activites_id }}" name="activites_id">
+                                    <input type="text" name="libelle" value="{{ $type_depense->libelle }}" class="form-control" required />
+                                    <button class="btn btn-bg-gradient-x-blue-green">Modifier</button>
+                                </form>
                             </div>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
-                            <h4 class="card-title" id="text"></h4>
-                            <a href="{{ route('entree-sorties.create') }}" class="btn btn-bg-gradient-x-orange-yellow">Nouvelle</a>
+                            <h4 class="card-title">Liste des types de dépense</h4>
                         </div>
                         <div class="card-content">
                             <div class="card-body card-dashboard" id="liste"></div>
@@ -114,34 +98,33 @@
             </div>
         </section>
     </div>
+
 @endsection
 
 @section('js')
     <script>
+        @error('libelle')
+            notify('warning', 'Ce type de dépense existe déjà.');
+        @enderror
 
-        const filtre = (type, val) => {
-            if (type === 'mois') {
-                $('.mois').attr('class', 'btn mr-1 mb-1 mois btn-outline-info')
-                $('#mois' + val).removeClass('btn-outline-info').addClass('btn-info')
-            }else{
-                $('.activity').attr('class', 'activity btn btn-outline-success btn-sm')
-                $('#activity' + val).removeClass('btn-outline-success').addClass('btn-success')
-            }
-            $('#'+type).val(val)
+        @error('activites_id')
+            notify('warning', 'Choisir une activité.');
+        @enderror
+
+        const filtre = (val) => {
+            $('.activity').attr('class', 'activity btn btn-outline-success btn-sm')
+            $('#activity' + val).removeClass('btn-outline-success').addClass('btn-success')
+            $('#activite').val(val)
             affiche()
-        }
+        };
 
         const affiche = () => {
             let activite = $('#activite').val(),
-                mois = $('#mois').val(),
-                url = "{{ route('entree-sorties.affiche', ['activite' => ':act', 'mois' => ':mois']) }}"
+                url = "{{ route('type-depense.affiche', ['activite' => ':act']) }}"
 
             url = url.replace(':act', activite)
-            url = url.replace(':mois', mois)
 
             $('#activity' + activite).removeClass('btn-outline-success').addClass('btn-success')
-
-            $('#text').text("Données d'entrée et de sortie de "+ listeMois()[parseInt(mois)-1] +" {{ annee() }}")
 
             $.ajax({
                 type : 'POST',
@@ -158,9 +141,6 @@
                 }
             })
         }
-
-        $(document).ready(function() {
-            affiche()
-        })
+        affiche();
     </script>
 @endsection
