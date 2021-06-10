@@ -27,6 +27,7 @@
     <div class="content-body">
         <section id="file-export">
             <div class="row">
+
                 <div class="col-xl-4 col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
@@ -100,7 +101,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <h4 class="card-title" id="text"></h4>
