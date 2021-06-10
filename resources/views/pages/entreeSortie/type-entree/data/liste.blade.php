@@ -3,34 +3,17 @@
         <thead>
             <tr>
                 <th width="5%"></th>
-                <th width="5%">Date</th>
                 <th>Activité</th>
-                <th colspan="2" class="text-center">Type</th>
-                <th width="15%">Entrée</th>
-                <th width="15%">Sorties</th>
-                <th width="30%">Description</th>
+                <th>Type de dépense</th>
                 <th width="3%"></th>
-            </tr>
-            <tr>
-                <th colspan="3"></th>
-                <th>Entrée</th>
-                <th>Dépense</th>
-                <th colspan="4"></th>
             </tr>
         </thead>
         <tbody>
             @foreach ($listes as $key => $liste )
                 <tr>
                     <td>{{ ++$key }}</td>
-                    <td>{{ formatDate($liste->date) }}</td>
                     <td>{{ $liste->activite->libelle }}</td>
-                    <td>{{ $liste->type_entrees_id ? $liste->type_entree->libelle : '-' }}</td>
-                    <td>{{ $liste->type_depenses_id ? $liste->type_depense->libelle : '-' }}</td>
-                    <td class="text-right">{{ $liste->entree == 0 ? '-' : formatNumber($liste->entree) }}</td>
-                    <td class="text-right">{{ $liste->sortie == 0 ? '-' : formatNumber($liste->sortie) }}</td>
-                    <td data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="{{ $liste->description }}" data-bg-color="pink" data-placement="right">
-                        {{ minText($liste->description) }}
-                    </td>
+                    <td>{{ $liste->libelle }}</td>
                     <td>
                         <span class="dropdown">
                             <button id="btnSearchDrop12" type="button" class="btn btn-sm btn-icon btn-pure font-medium-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -40,12 +23,12 @@
                                 <a href="javascript:void(0);" class="dropdown-item">
                                     <i class="ft-eye info"></i> Visualiser
                                 </a>
-                                <a href="javascript:void(0);" class="dropdown-item">
+                                <a href="{{ route('type-entree.edit', ['type_entree' => $liste]) }}" class="dropdown-item">
                                     <i class="ft-edit-2 warning"></i> Modifier
                                 </a>
                                 <a href="javascript:void(0);" class="dropdown-item" onclick="delForm({{ $liste->id }}, 'delItem')">
                                     <i class="ft-trash-2 danger"></i> Supprimer
-                                    <form id="delItem{{ $liste->id }}" method="POST" action="{{ route('entree-sorties.destroy', ['entree_sorty' => $liste]) }}">
+                                    <form id="delItem{{ $liste->id }}" method="POST" action="{{ route('type-entree.destroy', ['type_entree' => $liste]) }}">
                                         @csrf
                                         @method('DELETE')
                                     </form>
@@ -56,16 +39,6 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
-            <tr class="bg-gradient-directional-blue text-white">
-                <th colspan="5" class="text-right">Total :</th>
-                <th class="text-right">{{ formatNumber($listes->sum('entree')) }}</th>
-                <th class="text-right">{{ formatNumber($listes->sum('sortie')) }}</th>
-                <th class="text-right">Solde :</th>
-                @php($solde = $listes->sum('entree')-$listes->sum('sortie'))
-                <th class="text-right {{ $solde < 0 ? 'bg-danger' : 'bg-success' }}">{{ formatNumber($solde) }}</th>
-            </tr>
-        </tfoot>
     </table>
 </div>
 

@@ -39,9 +39,11 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('entree-sortie')->namespace('EntreeSorties')->group(function () {
             Route::resource('activite', 'ActiviteController');
-            Route::post('activite/{activite}/type_depense/', 'ActiviteController@activite_type_depense')->name('activite.type_depense');
+            Route::post('activite/{activite}/type/', 'ActiviteController@activite_type')->name('activite.type');
             Route::resource('type-depense', 'TypeDepenseController');
             Route::post('type-depense/affiche/{activite}', 'TypeDepenseController@affiche')->name('type-depense.affiche');
+            Route::resource('type-entree', 'TypeEntreeController');
+            Route::post('type-entree/affiche/{activite}', 'TypeEntreeController@affiche')->name('type-entree.affiche');
             Route::resource('entree-sorties', 'EntreeSortieController');
             Route::post('entree-sorties/affiche/{activite}/{mois}', 'EntreeSortieController@affiche')->name('entree-sorties.affiche');
         });

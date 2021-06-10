@@ -2,6 +2,10 @@
 
 use App\Log;
 
+function formatDate($date) {
+    return date('d/m/Y', strtotime($date));
+}
+
 function insertLog($description) {
     Log::create([
         'name' => auth()->user()->name,

@@ -18,7 +18,7 @@ class Annee
         if(session()->has('annee')) {
             return $next($request);
         }else{
-            return redirect()->route('annee')->with('warning', "Veuillez choisir une annee d'activité.");
+            return redirect()->route('annee')->with('warning', "Veuillez choisir une annee.");
         }
     }
 }

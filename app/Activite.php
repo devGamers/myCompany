@@ -16,4 +16,9 @@ class Activite extends Model
     {
         return $this->hasMany(TypeDepense::class, 'activites_id')->latest();
     }
+
+    public function type_entrees()
+    {
+        return $this->hasMany(TypeEntree::class, 'activites_id')->latest();
+    }
 }

@@ -3,26 +3,25 @@
 namespace App\Http\Controllers\EntreeSorties;
 
 use App\Activite;
-use App\TypeDepense;
+use App\TypeEntree;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
-class TypeDepenseController extends Controller
+class TypeEntreeController extends Controller
 {
-
     public function affiche(Request $request)
     {
         $activite = $request->activite;
 
         if ($activite == 0) {
-            $listes = TypeDepense::latest()->get();
+            $listes = TypeEntree::latest()->get();
         }else{
-            $listes = Activite::find($activite)->type_depenses;
+            $listes = Activite::find($activite)->type_entrees;
         }
 
-        return view('pages.entreeSortie.type-depense.data.liste', compact('listes'));
+        return view('pages.entreeSortie.type-entree.data.liste', compact('listes'));
     }
 
     /**
@@ -34,7 +33,7 @@ class TypeDepenseController extends Controller
     {
         $activite = Activite::latest()->get();
         $sideCompta = true;
-        return view('pages.entreeSortie.type-depense.index', compact('activite', 'sideCompta'));
+        return view('pages.entreeSortie.type-entree.index', compact('activite', 'sideCompta'));
     }
 
     /**
@@ -55,7 +54,6 @@ class TypeDepenseController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
             'libelle' => 'required|unique:type_depenses',
             'activites_id' => 'required'
@@ -65,14 +63,14 @@ class TypeDepenseController extends Controller
 
         try {
             $act = Activite::find($request->activites_id);
-            TypeDepense::create($request->all());
-            insertLog("Enregistrement du type de dépense " . $request->libelle . " de l'activité " . $act->libelle);
+            TypeEntree::create($request->all());
+            insertLog("Enregistrement du type d'entree " . $request->libelle . " de l'activité " . $act->libelle);
         } catch (\Throwable $th) {
             throw $th;
             DB::rollBack();
         }
         DB::commit();
-        return redirect()->back()->with('success', "Nouveau type de dépense ajouté");
+        return redirect()->back()->with('success', "Nouveau type d'entrée ajouté");
     }
 
     /**
@@ -92,11 +90,11 @@ class TypeDepenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TypeDepense $type_depense)
+    public function edit(TypeEntree $type_entree)
     {
         $activite = Activite::latest()->get();
         $sideCompta = true;
-        return view('pages.entreeSortie.type-depense.edit', compact('activite', 'sideCompta', 'type_depense'));
+        return view('pages.entreeSortie.type-entree.edit', compact('activite', 'sideCompta', 'type_entree'));
     }
 
     /**
@@ -106,12 +104,12 @@ class TypeDepenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TypeDepense $type_depense)
+    public function update(Request $request, TypeEntree $type_entree)
     {
         $this->validate($request, [
             'libelle' => [
                 'required',
-                Rule::unique('type_depenses')->ignore($type_depense->id)
+                Rule::unique('type_entrees')->ignore($type_entree->id)
             ],
             'activites_id' => 'required'
         ]);
@@ -119,14 +117,14 @@ class TypeDepenseController extends Controller
         DB::beginTransaction();
 
         try {
-            insertLog("Modification du type de dépense " . $type_depense->libelle . " en : " . $request->libelle);
-            $type_depense->update($request->all());
+            insertLog("Modification du type d'entrée " . $type_entree->libelle . " en : " . $request->libelle);
+            $type_entree->update($request->all());
         } catch (\Throwable $th) {
             throw $th;
             DB::rollBack();
         }
         DB::commit();
-        return redirect()->route('type-depense.index')->with('success', "Type de dépense modifié");
+        return redirect()->route('type-entree.index')->with('success', "Type d'entrée modifié");
     }
 
     /**
@@ -135,14 +133,14 @@ class TypeDepenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TypeDepense $type_depense)
+    public function destroy(TypeEntree $type_entree)
     {
-        if ($type_depense->entreeSorties->count() > 0) {
-            return redirect()->back()->with('warning', "Impossible de supprimer ce type de dépense car il possède des données");
+        if ($type_entree->entreeSorties->count() > 0) {
+            return redirect()->back()->with('warning', "Impossible de supprimer ce type d'entrée car il possède des données");
         }else{
-            insertLog("Suppression du type de dépense " . $type_depense->libelle);
-            $type_depense->delete();
-            return redirect()->back()->with('success', "Type de dépense supprimé.");
+            insertLog("Suppression du type d'entrée " . $type_entree->libelle);
+            $type_entree->delete();
+            return redirect()->back()->with('success', "Type d'entrée supprimé.");
         }
     }
 }

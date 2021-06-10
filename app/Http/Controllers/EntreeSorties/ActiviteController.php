@@ -11,10 +11,11 @@ use Illuminate\Validation\Rule;
 class ActiviteController extends Controller
 {
 
-    public function activite_type_depense(Request $request)
+    public function activite_type(Request $request)
     {
-        $listes = Activite::find($request->activite)->type_depenses;
-        return view('pages.entreeSortie.entrees-sorties.data.selectTypeDepense', compact('listes'));
+        $depense = Activite::find($request->activite)->type_depenses;
+        $entree = Activite::find($request->activite)->type_entrees;
+        return view('pages.entreeSortie.entrees-sorties.data.selectType', compact('depense', 'entree'));
     }
     /**
      * Display a listing of the resource.

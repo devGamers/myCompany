@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class EntreeSortie extends Model
 {
-    protected $fillable = ['date', 'description', 'entree', 'sortie', 'activites_id', 'type_depenses_id'];
+    protected $fillable = ['date', 'description', 'entree', 'sortie', 'activites_id',
+    'type_depenses_id', 'type_entrees_id'];
 
     /**
      * Get the activite that owns the Comptabilite
@@ -21,5 +22,10 @@ class EntreeSortie extends Model
     public function type_depense()
     {
         return $this->belongsTo(TypeDepense::class, 'type_depenses_id');
+    }
+
+    public function type_entree()
+    {
+        return $this->belongsTo(TypeEntree::class, 'type_entrees_id');
     }
 }

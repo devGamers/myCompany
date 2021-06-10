@@ -92,13 +92,13 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group" id="blockDepense">
+                                        <div class="form-group" id="block">
 
                                         </div>
 
                                         <div class="col-xl-3 col-12 form-group" id="blockValeur">
                                             <label for="value">Valeur <span class="text-danger">*</span></label>
-                                            <input type="number" value="0" name="" id="value" class="form-control key" required>
+                                            <input type="number" name="" id="value" class="form-control key" required>
                                         </div>
 
                                         <div class="col-12 form-group">
@@ -143,15 +143,19 @@
                 if (type === 'sortie') {
                     $('#blockType').attr('class', 'col-xl-3 col-12 form-group')
                     $('#blockValeur').attr('class', 'col-xl-3 col-12 form-group')
-                    $('#blockDepense').attr('class', 'col-xl-3 col-12 form-group')
-                    //$('#type_depense').removeAttr('disabled')
-                    $('#type_action').text("Type de sortie")
+                    $('#block').attr('class', 'col-xl-3 col-12 form-group')
+                    $('#blockEntree').hide()
+                    $('#type_entree').attr('disabled', true)
+                    $('#blockSortie').show('slow')
+                    $('#type_depense').removeAttr('disabled')
                 }else{
                     $('#blockType').attr('class', 'col-xl-3 col-12 form-group')
                     $('#blockValeur').attr('class', 'col-xl-3 col-12 form-group')
-                    $('#blockDepense').attr('class', 'col-xl-3 col-12 form-group')
-                    //$('#type_depense').attr('disabled', 'true')
-                    $('#type_action').text("Type d'entrée")
+                    $('#block').attr('class', 'col-xl-3 col-12 form-group')
+                    $('#blockEntree').show('slow')
+                    $('#type_entree').removeAttr('disabled')
+                    $('#blockSortie').hide()
+                    $('#type_depense').attr('disabled', true)
                 }
                 $('#value').attr('name', type)
             }
@@ -166,7 +170,7 @@
         })
 
         const chooseActivity = id => {
-            let url = "{{ route('activite.type_depense', ['activite' => ':act']) }}"
+            let url = "{{ route('activite.type', ['activite' => ':act']) }}"
             url = url.replace(':act', id)
             $.ajax({
                 type : 'POST',
@@ -176,7 +180,7 @@
                 },
                 success: function (response) { //alert('response');
                     toastr.clear()
-                    $('#blockDepense').html(response);
+                    $('#block').html(response);
                 },
                 error: function (response) {
                     notify('error', "Une erreur s'est produite. Contactez le concepteur.");
