@@ -6,10 +6,11 @@ function formatDate($date) {
     return date('d/m/Y', strtotime($date));
 }
 
-function insertLog($description) {
+function insertLog($description, $module = 2) {
     Log::create([
         'name' => auth()->user()->name,
         'description' => $description,
+        'modules_id' => $module,
         'users_id' => auth()->user()->id
     ]);
 }

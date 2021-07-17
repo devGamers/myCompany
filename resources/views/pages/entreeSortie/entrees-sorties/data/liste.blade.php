@@ -19,6 +19,27 @@
             </tr>
         </thead>
         <tbody>
+            @php($entrees = $listes->sum('entree'))
+            @php($sorties = $listes->sum('sortie'))
+            @php($solde = $listes->sum('entree')-$listes->sum('sortie'))
+            @if ($mois_passe != false && $listes_mois_passe != false)
+                <tr>
+                    <td>0</td>
+                    <td>{{ "01/".$mois_passe."/".annee() }}</td>
+                    <td>{{ $activite }}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td class="text-right">{{ formatNumber($listes_mois_passe->sum('entree')) }}</td>
+                    <td class="text-right">{{ formatNumber($listes_mois_passe->sum('sortie')) }}</td>
+                    <td data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Solde Initial" data-bg-color="pink" data-placement="right">
+                        {{ minText("Solde Initial") }}
+                    </td>
+                    <td>-</td>
+                </tr>
+                @php($entrees += $listes_mois_passe->sum('entree'))
+                @php($sorties += $listes_mois_passe->sum('sortie'))
+                @php($solde += $listes_mois_passe->sum('entree')-$listes_mois_passe->sum('sortie'))
+            @endif
             @foreach ($listes as $key => $liste )
                 <tr>
                     <td>{{ ++$key }}</td>
@@ -32,7 +53,14 @@
                         {{ minText($liste->description) }}
                     </td>
                     <td>
-                        <span class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-item" onclick="delForm({{ $liste->id }}, 'delItem')">
+                            <i class="ft-trash-2 danger"></i>
+                            <form id="delItem{{ $liste->id }}" method="POST" action="{{ route('entree-sorties.destroy', ['entree_sorty' => $liste]) }}">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </a>
+                        {{-- <span class="dropdown">
                             <button id="btnSearchDrop12" type="button" class="btn btn-sm btn-icon btn-pure font-medium-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="ft-more-vertical"></i>
                             </button>
@@ -51,7 +79,7 @@
                                     </form>
                                 </a>
                             </span>
-                        </span>
+                        </span> --}}
                     </td>
                 </tr>
             @endforeach
@@ -59,10 +87,9 @@
         <tfoot>
             <tr class="bg-gradient-directional-blue text-white">
                 <th colspan="5" class="text-right">Total :</th>
-                <th class="text-right">{{ formatNumber($listes->sum('entree')) }}</th>
-                <th class="text-right">{{ formatNumber($listes->sum('sortie')) }}</th>
+                <th class="text-right">{{ formatNumber($entrees) }}</th>
+                <th class="text-right">{{ formatNumber($sorties) }}</th>
                 <th class="text-right">Solde :</th>
-                @php($solde = $listes->sum('entree')-$listes->sum('sortie'))
                 <th class="text-right {{ $solde < 0 ? 'bg-danger' : 'bg-success' }}">{{ formatNumber($solde) }}</th>
             </tr>
         </tfoot>
@@ -71,6 +98,7 @@
 
 <script>
     $(".tableau").DataTable({
+        displayLength: 500,
         dom: "Bfrtip",
         buttons: ["copy", "csv", "excel", "pdf", "print"],
         "language": {
