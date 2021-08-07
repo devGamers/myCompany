@@ -93,6 +93,7 @@
                                         @php($numberMois = formatChiffre($key+1))
                                         <button type="button" onclick="filtre('mois', '{{ $numberMois }}')" id="mois{{ $numberMois }}"
                                             class="btn mr-1 mb-1 mois {{ $numberMois == date('m') ? 'btn-info' : 'btn-outline-info' }}"
+                                            style="padding: 0.3rem 0.3rem;"
                                         >
                                             {{ $value }}
                                         </button>

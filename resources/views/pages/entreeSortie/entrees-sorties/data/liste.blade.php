@@ -23,25 +23,26 @@
             @php($sorties = $listes->sum('sortie'))
             @php($solde = $listes->sum('entree')-$listes->sum('sortie'))
             @if ($mois_passe != false && $listes_mois_passe != false)
-                <tr>
+                @php($soldeInit = $listes_mois_passe->sum('entree') - $listes_mois_passe->sum('sortie'))
+                <tr class="bg-info text-white">
                     <td>0</td>
                     <td>{{ "01/".$mois_passe."/".annee() }}</td>
                     <td>{{ $activite }}</td>
                     <td>-</td>
                     <td>-</td>
-                    <td class="text-right">{{ formatNumber($listes_mois_passe->sum('entree')) }}</td>
-                    <td class="text-right">{{ formatNumber($listes_mois_passe->sum('sortie')) }}</td>
+                    <td class="text-right">{{ $soldeInit > 0 ? formatNumber($soldeInit) : '-' }}</td>
+                    <td class="text-right">{{ $soldeInit < 0 ? formatNumber($soldeInit) : '-' }}</td>
                     <td data-toggle="tooltip" data-popup="tooltip-custom" data-original-title="Solde Initial" data-bg-color="pink" data-placement="right">
                         {{ minText("Solde Initial") }}
                     </td>
                     <td>-</td>
-                </tr>
+                </tr>   
                 @php($entrees += $listes_mois_passe->sum('entree'))
                 @php($sorties += $listes_mois_passe->sum('sortie'))
                 @php($solde += $listes_mois_passe->sum('entree')-$listes_mois_passe->sum('sortie'))
             @endif
             @foreach ($listes as $key => $liste )
-                <tr>
+                <tr class="text-white {{ $liste->entree < $liste->sortie ? 'bg-danger' : 'bg-success' }}">
                     <td>{{ ++$key }}</td>
                     <td>{{ formatDate($liste->date) }}</td>
                     <td>{{ $liste->activite->libelle }}</td>
